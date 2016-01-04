@@ -1,6 +1,7 @@
 package com.example.safe.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class HomeActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 8:
+                        Intent intent = new Intent(HomeActivity.this,SettingActivity.class);
+                        startActivity(intent);
                         break;
                     default:
                         break;

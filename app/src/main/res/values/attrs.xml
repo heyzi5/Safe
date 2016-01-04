@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="attrs">
+        <attr name="Title" format="string" />
+        <attr name="ZT_On" format="string" />
+        <attr name="ZT_Off" format="string" />
+    </declare-styleable>
+</resources>

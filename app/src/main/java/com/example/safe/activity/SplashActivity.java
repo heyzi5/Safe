@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,13 @@ public class SplashActivity extends Activity {
     private String mDescription;
     private String mDownLoadUrl;
 
+    private static final int CODE_UPDATE_DIALOG = 0;
+    private static final int CODE_URL_ERROR = 1;
+    private static final int CODE_INT_ERROR = 2;
+    private static final int CODE_JSON_ERROR = 3;
+    private static final int CODE_NO_UPDATE = 4;
+    private SharedPreferences spf;
+
     private Handler mHandler = new Handler() {
         public void handleMessage (android.os.Message msg) {
             switch (msg.what) {
@@ -70,11 +80,8 @@ public class SplashActivity extends Activity {
             }
         }
     };
-    private static final int CODE_UPDATE_DIALOG = 0;
-    private static final int CODE_URL_ERROR = 1;
-    private static final int CODE_INT_ERROR = 2;
-    private static final int CODE_JSON_ERROR = 3;
-    private static final int CODE_NO_UPDATE = 4;
+    private RelativeLayout rlRoot;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +94,18 @@ public class SplashActivity extends Activity {
         tvProgress = (TextView) findViewById(R.id.tv_progress);
 
         tvVersion.setText("版本号：" + getVersionName());
-        checkVersion();
+
+        spf = getSharedPreferences("config",MODE_PRIVATE);
+        boolean autoUpdate = spf.getBoolean("auto_update",true);
+        if(autoUpdate) {
+            checkVersion();
+        } else {
+            mHandler.sendEmptyMessageDelayed(CODE_NO_UPDATE,2000);
+        }
+
+        rlRoot = (RelativeLayout) findViewById(R.id.rl_root);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.3f, 1f);
+        rlRoot.startAnimation(alphaAnimation);
     }
 
     private String getVersionName () {
