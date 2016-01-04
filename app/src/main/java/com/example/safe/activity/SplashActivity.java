@@ -79,7 +79,9 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // requestWindowFeature(getWindow().FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash);
+
 
         tvVersion = (TextView) findViewById(R.id.tv_version);
         tvProgress = (TextView) findViewById(R.id.tv_progress);
@@ -178,6 +180,7 @@ public class SplashActivity extends Activity {
                     }
                     mHandler.sendMessage(msg);
 
+
                     if(connection != null) {
                         connection.disconnect();//关闭网络连接
                     }
@@ -204,7 +207,15 @@ public class SplashActivity extends Activity {
                 enterHome();
             }
         });
-        builder.setCancelable(false);
+        //builder.setCancelable(false);//不让用户使用返回键取消对话框,用户体验很不好，尽量不要
+
+        //监听返回键，用户点击时触发
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                enterHome();
+            }
+        });
 
         builder.show();
 
@@ -233,14 +244,16 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.addCategory(Intent.CATEGORY_DEFAULT);
                     intent.setDataAndType(Uri.fromFile(responseInfo.result),
-                            "application/vnd.android.package-archive" );
-                    startActivity(intent);
+                            "application/vnd.android.package-archive");
+                    //startActivity(intent);
+                    startActivityForResult(intent, 0);//如果用户取消安装会返回结果，回调方法onActivityResult
                 }
 
                 @Override
                 //下载失败
                 public void onFailure(HttpException e, String s) {
                     Toast.makeText(SplashActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
+                    enterHome();
                 }
             });
         } else {
@@ -248,8 +261,16 @@ public class SplashActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        enterHome();
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void enterHome() {
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
         startActivity(intent);
+        SplashActivity.this.finish();
+
     }
 }

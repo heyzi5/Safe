@@ -2,8 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="你好"/>
+    <TextView
+        android:id="@+id/tv_home"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textColor="@color/colorBlack"
+        android:background="@color/colorPrimary"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:text="功能列表"/>
+
+    <com.example.safe.view.FocusedTextview
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The error message is very clear and even tells you at what method.In other words: You have no view with the id you give as a parameter."
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="18sp"
+        android:ellipsize="marquee"
+        android:singleLine="true"/>
+
+    <GridView
+        android:id="@+id/gv_home"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:verticalSpacing="20dp"
+        android:numColumns="3"/>
 </LinearLayout>
